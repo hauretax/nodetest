@@ -1,0 +1,14 @@
+<h1>Vous êtes dans le coucou</h1>
+
+<p>n°<%= test %></p>
+<h1>Je vais compter jusqu'à <%= test %></h1>
+
+<ul><%
+    for(var i = 0 ; i <= test ; i++) {
+	%>
+	<li id = <% i %>>
+	X <%= noms[i] %>
+	</li>
+<% } %></ul>
+<input type="text" id="test"></input>
+<input id = "add" type = "button" value = "let's go"></input>
