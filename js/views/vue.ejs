@@ -1,14 +1,42 @@
 <h1>Vous êtes dans le coucou</h1>
-
-<p>n°<%= test %></p>
-<h1>Je vais compter jusqu'à <%= test %></h1>
+<img id = "nicolas"src = "https://www.consoglobe.com/wp-content/uploads/2019/06/coucougris_shutterstock_1380980498_.jpg">
+<p>n°<%= tab %></p>
 
 <ul><%
-    for(var i = 0 ; i <= test ; i++) {
+    for(var i = 0 ; i <= 10 ; i++) {
 	%>
 	<li id = <% i %>>
-	X <%= noms[i] %>
+	X <%= i %>
 	</li>
 <% } %></ul>
 <input type="text" id="test"></input>
 <input id = "add" type = "button" value = "let's go"></input>
+
+<script>
+document.getElementById("add").onclick = dosomerequest;
+function showAlert()
+{
+  alert("Evènement de click détecté");
+}
+function dosomerequest(text)
+{
+	var xhr = new XMLHttpRequest();
+  
+  xhr.onreadystatechange = function() {
+	console.log("sa as renvoyer des truc")
+  };
+  xhr.open('POST', 'add', true)
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  var text = document.getElementById("test").value;
+  console.log(text);
+  xhr.send('list=' + text);
+}
+document.getElementById("nicolas").onclick = function()
+{
+	var propre = document.getElementById("nicolas");
+	if (propre.attributes.src == "https://lesbaroudeurs.fr/wp-content/uploads/2014/10/DSC_9477.jpg")
+		propre.setAttribute("src","https://www.consoglobe.com/wp-content/uploads/2019/06/coucougris_shutterstock_1380980498_.jpg");
+	else
+		propre.setAttribute("src","https://lesbaroudeurs.fr/wp-content/uploads/2014/10/DSC_9477.jpg");
+}
+</script>

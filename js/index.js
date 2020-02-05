@@ -1,41 +1,58 @@
-
 const express = require('express');
-var cook = require('cookie-parser')
- 
+const session = require('express-session');
+const bodyParser = require('body-parser');
+const router = express.Router();
 const app = express();
-app.use(cook()) 
 
-function parseCookies (request) {
-    var list = {},
-        rc = request.headers.cookie;
+app.use(session({secret: 'ssshhhhh',saveUninitialized: true,resave: true}));
+app.use(bodyParser.json());      
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.static(__dirname + '/views'));
 
-    rc && rc.split(';').forEach(function( cookie ) {
-        var parts = cookie.split('=');
-        list[parts.shift().trim()] = decodeURI(parts.join('='));
+var sess; // global session, NOT recommended
+
+router.get('/',(req,res) => {
+	sess = req.session;
+	
+	
+	res.render('vue.ejs', {tab: sess.list});
+});
+
+router.post('/add',(req,res) => {
+	sess = req.session;
+	if (sess.list == undefined)
+	sess.list = "B"
+else
+	sess.list = sess.list + "AAAAAAAAA'";
+	console.log(sess.list);
+	//sess.list = sess.list + req.body.newelem;
+    //res.end('done');
+});
+
+router.get('/admin',(req,res) => {
+    sess = req.session;
+    if(sess.email) {
+        res.write(`<h1>Hello ${sess.email} </h1><br>`);
+        res.end('<a href='+'/logout'+'>Logout</a>');
+    }
+    else {
+        res.write('<h1>Please login first.</h1>');
+        res.end('<a href='+'/'+'>Login</a>');
+    }
+});
+
+router.get('/logout',(req,res) => {
+    req.session.destroy((err) => {
+        if(err) {
+            return console.log(err);
+        }
+        res.redirect('/');
     });
 
-    return list;
-}
-
-app.get('/cook/:add', (req, res) =>{
-	res.cookie(req.params.add, "liste").send('cookie set');
-});
-app.get('/del/:del', (req, res) =>{
-	//console.log(req.session);
-	res.clearCookie(req.params.del).send('cookie kill');
 });
 
-app.get('/:coucou', (req, res) => {
-	var noms = ['un', 'deux','trois']
-	res.render('vue.ejs', {test: req.params.coucou, noms: noms});
-});
-app.get('/', (req, res) =>{
-	var cookies = parseCookies(request);
-	res.send(cookies);
-});
+app.use('/', router);
 
- 
-const port = process.env.PORT || 4000;
-app.listen(port, () => {
-    console.log(`listening on ${port}`);
+app.listen(process.env.PORT || 3000,() => {
+    console.log(`App Started on POOORT ${process.env.PORT || 3000}`);
 });
