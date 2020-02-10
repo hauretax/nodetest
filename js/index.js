@@ -26,7 +26,7 @@ else
 	sess.list = sess.list + "AAAAAAAAA'";
 	console.log(sess.list);
 	//sess.list = sess.list + req.body.newelem;
-    //res.end('done');
+    res.end('done');
 });
 
 router.get('/admin',(req,res) => {
@@ -39,6 +39,15 @@ router.get('/admin',(req,res) => {
         res.write('<h1>Please login first.</h1>');
         res.end('<a href='+'/'+'>Login</a>');
     }
+});
+
+router.get('/f',(req,res) =>{
+    res.end("choos a page number");
+});
+
+router.get('/f/:number',(req,res) => {
+    var fuck = 1;
+        res.render(req.params.number+'.ejs', {tab: fuck});
 });
 
 router.get('/logout',(req,res) => {
